@@ -21,6 +21,7 @@ import com.intellij.ide.util.gotoByName.ChooseByNameItemProvider;
 import com.intellij.ide.util.gotoByName.ChooseByNameModel;
 import com.intellij.ide.util.gotoByName.ChooseByNamePopup;
 import com.intellij.navigation.ChooseByNameContributor;
+import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.LangDataKeys;
@@ -107,11 +108,12 @@ public class GotoRequestAction extends GotoActionBase implements DumbAware {
         boolean mayRequestOpenInCurrentWindow = model.willOpenEditor() &&
                 FileEditorManagerEx.getInstanceEx(project).hasSplitOrUndockedWindows();
         Pair<String, Integer> start = getInitialText(useSelectionFromEditor, e);
-        showNavigationPopup(callback, findUsagesTitle,
-                            RestChooseByNamePopup.createPopup(project, model, itemProvider, start.first,
-                                                              mayRequestOpenInCurrentWindow,
-                                                              start.second),
-                            allowMultipleSelection);
+        final RestChooseByNamePopup popup = RestChooseByNamePopup.createPopup(project, model, itemProvider, start.first,
+                mayRequestOpenInCurrentWindow,
+                start.second);
+
+//        ActionToolbar.setTargetComponent(popup);
+        showNavigationPopup(callback, findUsagesTitle, popup, allowMultipleSelection);
     }
 
     protected static class GotoRequestMappingFilter extends ChooseByNameFilter<HttpMethod> {

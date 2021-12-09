@@ -37,7 +37,7 @@
         </ul>
         ]]></description>
 
-    <idea-version since-build="201.0"/>
+    <idea-version since-build="212.4746"/>
 
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.java</depends>
@@ -88,6 +88,7 @@
                 class="com.github.restful.tool.actions.dialog.CurrClassTreeAction">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
+
         <group id="RestfulTool.action.OptionForEditors"
                class="com.github.restful.tool.actions.copy.OptionForEditorGroups">
             <add-to-group group-id="EditorPopupMenu" anchor="after"

@@ -22,6 +22,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.java.stubs.index.JavaAnnotationIndex;
 import com.intellij.psi.search.GlobalSearchScope;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,7 +48,7 @@ public class SpringHelper {
             moduleList.addAll(getRequests(controllerClass));
         }
 
-        moduleList.addAll(KotlinUtil.getKotlinRequests(project, module));
+//        moduleList.addAll(KotlinUtil.getKotlinRequests(project, module));
 
         return moduleList;
     }
@@ -82,7 +84,20 @@ public class SpringHelper {
     }
 
     public static boolean hasRestful(@NotNull PsiClass psiClass) {
-        return psiClass.hasAnnotation(Control.Controller.getQualifiedName()) || psiClass.hasAnnotation(Control.RestController.getQualifiedName());
+        final PsiAnnotation[] annotations = psiClass.getAnnotations();
+        if (ArrayUtils.isEmpty(annotations)) {
+            return false;
+        }
+
+        for (PsiAnnotation annotation : annotations) {
+            final String qualifiedName = annotation.getQualifiedName();
+            if (StringUtils.equals(qualifiedName, Control.Controller.getQualifiedName())
+                    || StringUtils.equals(qualifiedName, Control.RestController.getQualifiedName())) {
+                return true;
+            }
+        }
+//        return psiClass.hasAnnotation(Control.Controller.getQualifiedName()) || psiClass.hasAnnotation(Control.RestController.getQualifiedName());
+        return false;
     }
 
     /**

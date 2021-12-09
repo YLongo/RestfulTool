@@ -50,10 +50,11 @@ public interface TreeOption extends EditorOption {
      * @return bool
      */
     default boolean withPsiClass(@NotNull AnActionEvent e) {
-        if (e.getProject() == null) {
-            return false;
-        }
-        PSI_CLASSES[0] = getPsiClass(e);
-        return RestUtil.hasRestful(PSI_CLASSES[0]);
+        return false;
+//        if (e.getProject() == null) {
+//            return false;
+//        }
+//        PSI_CLASSES[0] = getPsiClass(e);
+//        return RestUtil.hasRestful(PSI_CLASSES[0]);
     }
 }

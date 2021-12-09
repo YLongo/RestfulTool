@@ -74,6 +74,11 @@ public class RestfulToolWindowFactory implements ToolWindowFactory {
         return ToolWindowManager.getInstance(project).getToolWindow(TOOL_WINDOW_ID);
     }
 
+    @Override
+    public boolean isApplicable(@NotNull Project project) {
+        return false;
+    }
+
     public static void showWindow(@NotNull Project project, @Nullable Runnable onShow) {
         ToolWindow window = getWindow(project);
         if (window == null) {

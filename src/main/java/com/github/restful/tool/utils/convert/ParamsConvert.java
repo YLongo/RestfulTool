@@ -7,8 +7,8 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.java.PsiLiteralExpressionImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.kotlin.name.Name;
-import org.jetbrains.kotlin.psi.*;
+//import org.jetbrains.kotlin.name.Name;
+//import org.jetbrains.kotlin.psi.*;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -22,7 +22,7 @@ import java.util.Map;
 public class ParamsConvert {
 
     private PsiMethod psiMethod;
-    private KtNamedFunction function;
+//    private KtNamedFunction function;
 
     /**
      * 是否是基本数据类型
@@ -44,13 +44,13 @@ public class ParamsConvert {
     public void setPsiElement(@NotNull NavigatablePsiElement psiElement) throws PsiUnSupportException {
         if (psiElement instanceof PsiMethod) {
             this.psiMethod = (PsiMethod) psiElement;
-            this.function = null;
+//            this.function = null;
             return;
-        } else if (psiElement instanceof KtNamedFunction) {
+        } /*else if (psiElement instanceof KtNamedFunction) {
             this.function = (KtNamedFunction) psiElement;
             this.psiMethod = null;
             return;
-        }
+        }*/
         throw new PsiUnSupportException(psiElement);
     }
 
@@ -60,9 +60,9 @@ public class ParamsConvert {
     public boolean isRaw() {
         if (psiMethod != null) {
             return isRawOfPsiMethod();
-        } else if (function != null) {
+        } /*else if (function != null) {
             return isRawOfFunction();
-        }
+        }*/
 
         return false;
     }
@@ -86,25 +86,25 @@ public class ParamsConvert {
     }
 
     private boolean isRawOfFunction() {
-        for (KtParameter ktParameter : function.getValueParameters()) {
-            for (KtAnnotationEntry annotationEntry : ktParameter.getAnnotationEntries()) {
-                Name shortName = annotationEntry.getShortName();
-                if (shortName == null) {
-                    continue;
-                }
-                if (SpringHttpMethodAnnotation.REQUEST_BODY.getShortName().equals(shortName.asString())) {
-                    KtTypeReference typeReference = ktParameter.getTypeReference();
-                    if (typeReference != null) {
-                        String type = typeReference.getChildren()[0].getChildren()[0].getText();
-                        this.isBasicDataTypes = PsiUtil.isKotlinBasicDataTypes(type);
-                        if (this.isBasicDataTypes) {
-                            this.basicDataParamName = ktParameter.getName();
-                        }
-                    }
-                    return true;
-                }
-            }
-        }
+//        for (KtParameter ktParameter : function.getValueParameters()) {
+//            for (KtAnnotationEntry annotationEntry : ktParameter.getAnnotationEntries()) {
+//                Name shortName = annotationEntry.getShortName();
+//                if (shortName == null) {
+//                    continue;
+//                }
+//                if (SpringHttpMethodAnnotation.REQUEST_BODY.getShortName().equals(shortName.asString())) {
+//                    KtTypeReference typeReference = ktParameter.getTypeReference();
+//                    if (typeReference != null) {
+//                        String type = typeReference.getChildren()[0].getChildren()[0].getText();
+//                        this.isBasicDataTypes = PsiUtil.isKotlinBasicDataTypes(type);
+//                        if (this.isBasicDataTypes) {
+//                            this.basicDataParamName = ktParameter.getName();
+//                        }
+//                    }
+//                    return true;
+//                }
+//            }
+//        }
         return false;
     }
 
@@ -126,9 +126,9 @@ public class ParamsConvert {
         if (psiMethod != null) {
             return parsePsiMethodParams();
         }
-        if (function != null) {
-            return parseFunctionParams();
-        }
+//        if (function != null) {
+//            return parseFunctionParams();
+//        }
         return Collections.emptyMap();
     }
 
@@ -197,78 +197,79 @@ public class ParamsConvert {
 
     @NotNull
     private Map<String, Object> parseFunctionParams() {
-        List<KtParameter> parameters = function.getValueParameters();
-        if (parameters.isEmpty()) {
-            return Collections.emptyMap();
-        }
-        Map<String, Object> params = new LinkedHashMap<>();
-        base:
-        for (KtParameter ktParameter : parameters) {
-            String paramName = ktParameter.getName();
-            List<KtAnnotationEntry> entries = ktParameter.getAnnotationEntries();
-            for (KtAnnotationEntry entry : entries) {
-                Name shortName = entry.getShortName();
-                if (shortName == null) {
-                    continue;
-                }
-                if (SpringHttpMethodAnnotation.REQUEST_HEADER.getShortName().equals(shortName.asString())) {
-                    continue base;
-                }
-                if (SpringHttpMethodAnnotation.REQUEST_PARAM.getShortName().equals(shortName.asString())) {
-                    List<? extends ValueArgument> valueArguments = entry.getValueArguments();
-                    if (valueArguments.isEmpty()) {
-                        continue base;
-                    } else {
-                        for (ValueArgument valueArgument : valueArguments) {
-                            if (!(valueArgument instanceof KtValueArgument)) {
-                                continue;
-                            }
-                            KtValueArgument ktValueArgument = (KtValueArgument) valueArgument;
-                            if (ktValueArgument.isNamed()) {
-                                KtValueArgumentName argumentName = ktValueArgument.getArgumentName();
-                                if (argumentName == null) {
-                                    continue;
-                                }
-                                String name = argumentName.getAsName().asString();
-                                if (!("name".equals(name) || "value".equals(name))) {
-                                    continue;
-                                }
-                            }
-                            KtExpression expression = ktValueArgument.getArgumentExpression();
-                            if (expression instanceof KtStringTemplateExpression) {
-                                KtStringTemplateExpression stringTemplateExpression = (KtStringTemplateExpression) expression;
-                                paramName = stringTemplateExpression.getChildren()[0].getText();
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-
-            params.put(paramName, getDefaultValue(ktParameter.getDefaultValue(), false));
-        }
-        return params;
+        return Collections.emptyMap();
+//        List<KtParameter> parameters = function.getValueParameters();
+//        if (parameters.isEmpty()) {
+//            return Collections.emptyMap();
+//        }
+//        Map<String, Object> params = new LinkedHashMap<>();
+//        base:
+//        for (KtParameter ktParameter : parameters) {
+//            String paramName = ktParameter.getName();
+//            List<KtAnnotationEntry> entries = ktParameter.getAnnotationEntries();
+//            for (KtAnnotationEntry entry : entries) {
+//                Name shortName = entry.getShortName();
+//                if (shortName == null) {
+//                    continue;
+//                }
+//                if (SpringHttpMethodAnnotation.REQUEST_HEADER.getShortName().equals(shortName.asString())) {
+//                    continue base;
+//                }
+//                if (SpringHttpMethodAnnotation.REQUEST_PARAM.getShortName().equals(shortName.asString())) {
+//                    List<? extends ValueArgument> valueArguments = entry.getValueArguments();
+//                    if (valueArguments.isEmpty()) {
+//                        continue base;
+//                    } else {
+//                        for (ValueArgument valueArgument : valueArguments) {
+//                            if (!(valueArgument instanceof KtValueArgument)) {
+//                                continue;
+//                            }
+//                            KtValueArgument ktValueArgument = (KtValueArgument) valueArgument;
+//                            if (ktValueArgument.isNamed()) {
+//                                KtValueArgumentName argumentName = ktValueArgument.getArgumentName();
+//                                if (argumentName == null) {
+//                                    continue;
+//                                }
+//                                String name = argumentName.getAsName().asString();
+//                                if (!("name".equals(name) || "value".equals(name))) {
+//                                    continue;
+//                                }
+//                            }
+//                            KtExpression expression = ktValueArgument.getArgumentExpression();
+//                            if (expression instanceof KtStringTemplateExpression) {
+//                                KtStringTemplateExpression stringTemplateExpression = (KtStringTemplateExpression) expression;
+//                                paramName = stringTemplateExpression.getChildren()[0].getText();
+//                                break;
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//
+//            params.put(paramName, getDefaultValue(ktParameter.getDefaultValue(), false));
+//        }
+//        return params;
     }
 
     @Nullable
-    private Object getDefaultValue(@Nullable KtExpression expression, @SuppressWarnings("SameParameterValue") boolean keep) {
-        if (expression == null) {
-            return keep ? null : "";
-        }
-        if (expression instanceof KtStringTemplateExpression) {
-            KtStringTemplateExpression templateExpression = (KtStringTemplateExpression) expression;
-            String text = templateExpression.getChildren()[0].getText();
-            if (!keep && text == null) {
-                return "";
-            }
-            return text;
-        }
-        if (expression instanceof KtCallExpression) {
-            KtCallExpression callExpression = (KtCallExpression) expression;
-            return callExpression.getName();
-        }
-        return keep ? null : "";
-    }
+//    private Object getDefaultValue(@Nullable KtExpression expression, @SuppressWarnings("SameParameterValue") boolean keep) {
+//        if (expression == null) {
+//            return keep ? null : "";
+//        }
+//        if (expression instanceof KtStringTemplateExpression) {
+//            KtStringTemplateExpression templateExpression = (KtStringTemplateExpression) expression;
+//            String text = templateExpression.getChildren()[0].getText();
+//            if (!keep && text == null) {
+//                return "";
+//            }
+//            return text;
+//        }
+//        if (expression instanceof KtCallExpression) {
+//            KtCallExpression callExpression = (KtCallExpression) expression;
+//            return callExpression.getName();
+//        }
+//        return keep ? null : "";
+//    }
 
     /**
      * get method params to convert show String

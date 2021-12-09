@@ -15,7 +15,7 @@ import com.intellij.psi.NavigatablePsiElement;
 import com.intellij.psi.PsiMethod;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.kotlin.psi.KtNamedFunction;
+//import org.jetbrains.kotlin.psi.KtNamedFunction;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -35,7 +35,7 @@ public class ServiceStub {
      * PsiMethod | KtNamedFunction
      *
      * @see com.intellij.psi.PsiMethod
-     * @see org.jetbrains.kotlin.psi.KtNamedFunction
+//     * @see org.jetbrains.kotlin.psi.KtNamedFunction
      */
     private NavigatablePsiElement psiElement;
 
@@ -91,13 +91,13 @@ public class ServiceStub {
         return null;
     }
 
-    @Nullable
-    public KtNamedFunction getKtNamedFunction() {
-        if (this.psiElement instanceof KtNamedFunction) {
-            return ((KtNamedFunction) this.psiElement);
-        }
-        return null;
-    }
+//    @Nullable
+//    public KtNamedFunction getKtNamedFunction() {
+//        if (this.psiElement instanceof KtNamedFunction) {
+//            return ((KtNamedFunction) this.psiElement);
+//        }
+//        return null;
+//    }
 
     public final void navigate() {
         if (this.psiElement == null) {
